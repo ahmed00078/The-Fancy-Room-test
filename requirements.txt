@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+scrapy
+selenium
+pandas
+sqlite3

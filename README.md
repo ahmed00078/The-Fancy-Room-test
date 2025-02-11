@@ -44,7 +44,7 @@ Avant de commencer, assurez-vous d'avoir installé Python 3.x et pip sur votre m
 ```bash
 # Créer un environnement virtuel
 python -m venv env
-source env/bin/activate   # sous Linux/Mac ou env\Scripts\activate sous Windows
+source env/bin/activate   # sous Linux/Mac ou env\Scripts\activate sous Windows(source env/Scripts/activate)
 
 # Installer les dépendances
 pip install requests beautifulsoup4 scrapy selenium pandas sqlite3
