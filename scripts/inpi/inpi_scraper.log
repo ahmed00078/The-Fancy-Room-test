@@ -1,0 +1,30 @@
+2025-02-12 23:48:25,943 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-12 23:50:33,157 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-12 23:52:41,133 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-12 23:53:51,949 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-12 23:53:51,979 - INFO - Data saved to inpi_companies_20250212_235351.csv
+2025-02-13 00:54:57,903 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+====================================================================================================2025-02-13 00:56:14,332 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:01:08,906 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:01:21,236 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:01:49,382 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:03:12,705 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:03:43,618 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:05:05,098 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:05:25,304 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:06:22,363 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+2025-02-13 01:12:23,627 - ERROR - Attempt 1 failed: 404 Client Error: Not Found for url: https://data.inpi.fr/search/search
+2025-02-13 01:12:26,796 - ERROR - Attempt 2 failed: 404 Client Error: Not Found for url: https://data.inpi.fr/search/search
+2025-02-13 01:12:31,802 - ERROR - Attempt 3 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-02-13 01:12:31,802 - ERROR - Failed to fetch https://data.inpi.fr/search/search after 3 attempts
+2025-02-13 01:15:26,075 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+====================================================================================================
+2025-02-13 01:27:54,224 - ERROR - Error in company search: 'INPIScraper' object has no attribute '_extract_company_links'
+====================================================================================================
+2025-02-13 01:45:59,365 - ERROR - Attempt 1 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-02-13 01:46:03,072 - ERROR - Error extracting company data: name 're' is not defined
+====================================================================================================
+
+2025-02-13 01:51:47,197 - ERROR - Attempt 1 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-02-13 01:52:58,659 - ERROR - Attempt 1 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-02-13 02:00:39,116 - INFO - Data saved to inpi_companies_20250213_020039.csv
