@@ -1,0 +1,2 @@
+company_name,siren,siren_hq,registration_date,company_nature,legal_form,main_activity,ape_code,establishments
+BOSQUET-GERANT SCI,430653709,SIREN (siège),Date d'immatriculation au RNE,Nature de l'entreprise,Forme juridique,Activité principale,Code APE,"[{'type': ""Type d'établissement""}, {'siret': 'Siret', 'ape_code': 'Code APE', 'address': 'Adresse'}]"

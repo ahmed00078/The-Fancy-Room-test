@@ -52,9 +52,9 @@ class INPIScraper:
         """Extract company information from INPI HTML content"""
         soup = BeautifulSoup(html_content, 'html.parser')
         company_data = {}
-
+    
         try:
-            # Extract company name and SIREN
+            # Extract company name and SIREN from the header
             header = soup.find('h1', class_='truncate-long-title')
             if header:
                 name_span = header.find('span', class_='inpi-bold')
@@ -63,53 +63,70 @@ class INPIScraper:
                 siren_match = re.search(r'SIREN\s+(\d{3}\s*\d{3}\s*\d{3})', header.text)
                 if siren_match:
                     company_data['siren'] = siren_match.group(1).replace(' ', '')
-
-            # Extract company details
-            for block in soup.find_all('div', class_='bloc-detail-notice'):
-                label = block.find('p', class_='font-weight-300')
-                value = block.find('p', {'class': ['font-size-0-9-rem', 'highlight-text']})
+    
+            # Find all detail blocks within the first container
+            identity_section = soup.find('h3', string='Identité')
+            if identity_section:
+                detail_blocks = identity_section.find_parent('div', class_='row').find_all('div', class_='bloc-detail-notice')
                 
-                if not label or not value:
-                    continue
+                for block in detail_blocks:
+                    # Find the label (first p element in the block)
+                    label = block.find('p', class_='font-weight-300')
 
-                label_text = label.text.strip()
-                value_text = value.text.strip()
+                    # Find the value (second p element in the block)
+                    # First, get all p elements in the block
+                    all_p_elements = block.find_all('p')
+                    # The value should be the second p element (index 1)
+                    value = all_p_elements[1] if len(all_p_elements) > 1 else None
 
-                field_mapping = {
-                    "Date d'immatriculation au RNE": 'registration_date',
-                    "Forme juridique": 'legal_form',
-                    "Activité principale": 'main_activity',
-                    "Code APE": 'ape_code',
-                    "Adresse du siège": 'headquarters_address',
-                    "Nature de l'entreprise": 'company_nature',
-                    "Début d'activité": 'activity_start_date',
-                    "SIREN (siège)": 'siren_hq'
-                }
+                    if not label or not value:
+                        continue
+                
+                    label_text = label.text.strip()
+                    value_text = value.text.strip()
 
-                field_name = field_mapping.get(label_text)
-                if field_name:
-                    if field_name == 'ape_code' and '-' in value_text:
-                        company_data[field_name] = value_text.split('-')[0].strip()
-                    elif field_name == 'headquarters_address':
-                        # Parse address into components
+                    print("Label: ", label_text)
+                    print("Value: ", value_text)
+                    if not label or not value:
+                        continue
+                    
+                    label_text = label.text.strip()
+                    value_text = value.text.strip()
+    
+                    # Map specific fields
+                    if "SIREN (siège)" in label_text:
+                        company_data['siren_hq'] = value_text
+                    elif "Date d'immatriculation au RNE" in label_text:
+                        company_data['registration_date'] = value_text
+                    elif "Nature de l'entreprise" in label_text:
+                        company_data['company_nature'] = value_text
+                    elif "Forme juridique" in label_text:
+                        company_data['legal_form'] = value_text
+                    elif "Activité principale" in label_text:
+                        company_data['main_activity'] = value_text
+                    elif "Code APE" in label_text:
+                        # Extract just the code portion if there's a hyphen
+                        company_data['ape_code'] = value_text.split('-')[0].strip() if '-' in value_text else value_text
+                    elif "Adresse du siège" in label_text:
+                        # Split address into components and clean up
                         address_parts = value_text.split()
-                        if len(address_parts) >= 3:
+                        if len(address_parts) >= 4:  # Make sure we have enough parts
                             company_data['address'] = {
-                                'number': address_parts[0],
-                                'street_type': address_parts[1] if len(address_parts) > 1 else '',
-                                'street': ' '.join(address_parts[2:-3]) if len(address_parts) > 4 else '',
-                                'postal_code': address_parts[-3] if len(address_parts) > 2 else '',
-                                'city': address_parts[-2] if len(address_parts) > 1 else '',
-                                'country': address_parts[-1] if address_parts else ''
+                                'street_number': address_parts[0],
+                                'street_type': address_parts[1],
+                                'street_name': ' '.join(address_parts[2:-3]),
+                                'postal_code': address_parts[-3],
+                                'city': address_parts[-2],
+                                'country': address_parts[-1]
                             }
-                    else:
-                        company_data[field_name] = value_text
-
+                    elif "Début d'activité" in label_text:
+                        company_data['activity_start_date'] = value_text
+    
             # Extract establishments
             establishments = []
-            establishments_section = soup.find(string='Établissements')
-            if establishments_section:
-                establishment_section = establishments_section.find_parent('div', class_='row')
+            establishments_title = soup.find('h3', string='Établissements')
+            if establishments_title:
+                establishment_section = establishments_title.find_next('div', class_='row')
                 if establishment_section:
                     current_establishment = {}
                     for block in establishment_section.find_all('div', class_='bloc-detail-notice'):
@@ -124,27 +141,26 @@ class INPIScraper:
                                 if current_establishment:
                                     establishments.append(current_establishment.copy())
                                 current_establishment = {'siret': value_text}
-                            else:
-                                field_mapping = {
-                                    "Type d'établissement": 'type',
-                                    "Date début d'activité": 'start_date',
-                                    "Code APE": 'ape_code',
-                                    "Adresse": 'address'
-                                }
-                                field = field_mapping.get(label_text)
-                                if field:
-                                    current_establishment[field] = value_text
-
+                            elif "Type d'établissement" in label_text:
+                                current_establishment['type'] = value_text
+                            elif "Date début d'activité" in label_text:
+                                current_establishment['start_date'] = value_text
+                            elif "Code APE" in label_text:
+                                current_establishment['ape_code'] = value_text.split('-')[0].strip() if '-' in value_text else value_text
+                            elif "Adresse" in label_text:
+                                address_text = value_text.replace('\n', ' ').strip()
+                                current_establishment['address'] = address_text
+    
                     if current_establishment:
                         establishments.append(current_establishment)
                         
             if establishments:
                 company_data['establishments'] = establishments
-
+    
         except Exception as e:
             self.logger.error(f"Error extracting company data: {str(e)}")
             raise
-
+        
         return company_data
 
     def _make_request(self, url: str, method: str = 'get', data: Dict = None) -> Optional[requests.Response]:

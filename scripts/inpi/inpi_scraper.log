@@ -28,3 +28,10 @@
 2025-02-13 01:51:47,197 - ERROR - Attempt 1 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 2025-02-13 01:52:58,659 - ERROR - Attempt 1 failed: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 2025-02-13 02:00:39,116 - INFO - Data saved to inpi_companies_20250213_020039.csv
+2025-02-13 02:07:39,168 - INFO - Data saved to inpi_companies_20250213_020739.csv
+2025-02-13 02:13:53,941 - INFO - Data saved to inpi_companies_20250213_021353.csv
+2025-02-13 02:16:48,083 - INFO - Data saved to inpi_companies_20250213_021648.csv
+2025-02-13 02:19:03,566 - INFO - Data saved to inpi_companies_20250213_021903.csv
+2025-02-13 02:21:05,385 - INFO - Data saved to inpi_companies_20250213_022105.csv
+2025-02-13 02:25:54,283 - INFO - Data saved to inpi_companies_20250213_022554.csv
+2025-02-13 02:29:36,538 - INFO - Data saved to inpi_companies_20250213_022936.csv
