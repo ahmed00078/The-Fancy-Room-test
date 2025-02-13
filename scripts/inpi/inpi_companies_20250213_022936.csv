@@ -1,2 +1,0 @@
-company_name,siren,siren_hq,registration_date,company_nature,legal_form,main_activity,ape_code,address,establishments
-BOSQUET-GERANT SCI,430653709,430 653 709,01/01/1998,Gestion de biens,Entrepreneur individuel,Location de logements,6820A,"{'street_number': '22', 'street_type': 'RUE', 'street_name': 'ALPHONSE DAUDET 44760 LA BERNERIE', 'postal_code': 'EN', 'city': 'RETZ', 'country': 'FRANCE'}","[{'type': ""Type d'établissement""}, {'siret': 'Siret', 'ape_code': 'Code APE', 'address': 'Adresse'}]"

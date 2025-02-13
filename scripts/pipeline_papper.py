@@ -7,8 +7,14 @@ from typing import Dict, Optional
 from datetime import datetime
 import time
 import random
-from fake_useragent import UserAgent
 import cloudscraper
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0",
+]
 
 class PappersScraper:
     def __init__(self):
@@ -32,9 +38,8 @@ class PappersScraper:
 
     def setup_session(self):
         """Configure la session avec des headers appropriés"""
-        ua = UserAgent()
         self.headers = {
-            'User-Agent': ua.random,
+            'User-Agent': random.choice(USER_AGENTS),
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -58,7 +63,7 @@ class PappersScraper:
         for attempt in range(max_retries):
             try:
                 # Mettre à jour le User-Agent à chaque tentative
-                self.headers['User-Agent'] = UserAgent().random
+                self.headers['User-Agent'] = random.choice(USER_AGENTS)
                 self.scraper.headers.update(self.headers)
                 
                 # Effectuer la requête
@@ -145,7 +150,7 @@ class PappersScraper:
                         })
             data['etablissements'] = etablissements
 
-        except Exception as e:
+        except (AttributeError, TypeError) as e:
             logging.error(f"Erreur lors de l'extraction des données: {str(e)}")
             data['error'] = str(e)
 
@@ -159,13 +164,16 @@ class PappersScraper:
 
     def scrape_company(self, siren: str) -> Dict:
         """Scrape une entreprise à partir de son SIREN"""
-        url = f'https://www.pappers.fr/entreprise/sci-baba-and-co-{siren}'
+        url = f'https://www.pappers.fr/entreprise/{siren}'
         self.random_delay()
         
         html_content = self.get_with_retry(url)
         if html_content:
-            return self.extract_company_data(html_content)
+            data = self.extract_company_data(html_content)
+            logging.info(f"Successfully scraped data for SIREN: {siren}")
+            return data
         else:
+            logging.error(f"Failed to access page for SIREN: {siren}")
             return {'error': 'Impossible d\'accéder à la page'}
 
     def save_to_csv(self, data: Dict, filename: str = None):
