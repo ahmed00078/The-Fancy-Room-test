@@ -73,7 +73,6 @@ class INPIScraper:
                     # Find the label (first p element in the block)
                     label = block.find('p', class_='font-weight-300')
 
-                    # Find the value (second p element in the block)
                     # First, get all p elements in the block
                     all_p_elements = block.find_all('p')
                     # The value should be the second p element (index 1)
@@ -85,13 +84,8 @@ class INPIScraper:
                     label_text = label.text.strip()
                     value_text = value.text.strip()
 
-                    print("Label: ", label_text)
-                    print("Value: ", value_text)
                     if not label or not value:
                         continue
-                    
-                    label_text = label.text.strip()
-                    value_text = value.text.strip()
     
                     # Map specific fields
                     if "SIREN (siège)" in label_text:
@@ -130,9 +124,14 @@ class INPIScraper:
                 if establishment_section:
                     current_establishment = {}
                     for block in establishment_section.find_all('div', class_='bloc-detail-notice'):
-                        label = block.find('p', class_='font-weight-300')
-                        value = block.find('p', class_='font-size-0-9-rem')
-                        
+                        # Use the same approach for establishments
+                        all_p_elements = block.find_all('p')
+                        label = all_p_elements[0] if all_p_elements else None
+                        value = all_p_elements[1] if len(all_p_elements) > 1 else None
+
+                        print("\n\n Label: ", label)
+                        print("\n\n Value: ", value)
+
                         if label and value:
                             label_text = label.text.strip()
                             value_text = value.text.strip()
